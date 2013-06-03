@@ -2,20 +2,21 @@
     'use strict';
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
-        define(["jquery", "history", "moduleFactory"], factory);
+        define(["jquery", "module"], factory);
     } else {
         // Browser globals:
-        factory(window.jQuery, window.History, window.moduleFactory);
+        window.Ajaxify = factory(window.jQuery, window.module);
     }
-}(function ($, H, mf) {
+}(function ($, module) {
     'use strict';
+
     return {
         version: "1.0",
         settings: {
             method: 'get',
             format: 'jsonp', // format of backend data
             url: null, // url, which ajax request going to
-            debug: false, // just a flag
+            debug: false,
             multipleQueries: false, // if we're need to handle multiple active requests, turn this thing on
             data: null, // blocks, that we needed
             preParseCallback: null,
@@ -170,9 +171,7 @@
             // TODO: rewrite this code to be cross-browser (right now, bad support for IE7-8)
             // maybe i'll dig into replaceState().
             if (typeof response.title !== "undefined" && response.title.length > 0) {
-                var State = History.getState();
-                State.title = response.title;
-                History.setTitle(State);
+                document.title = response.title;
             }
 
             if (!this.settings.multipleQueries) {
@@ -221,7 +220,7 @@
                         console.log(dynamicBlock.html());
                     }
 
-                    mf.initAppModules($("[data-ajaxBlock="+key+"]"));
+                    module.initAppModules($("[data-ajaxBlock="+key+"]"));
                 }
             }
         },

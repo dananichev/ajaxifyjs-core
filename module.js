@@ -1,4 +1,15 @@
-define(["jquery"], function($) {
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define(["jquery"], factory);
+    } else {
+        // Browser globals:
+        window.Module = factory(window.jQuery);
+    }
+}(function ($) {
+    'use strict';
+
     return {
         version: "1.0",
         binding: {},
@@ -103,5 +114,5 @@ define(["jquery"], function($) {
                 self.stats[module].stopTime = timestamp;
             }
         }
-    }
-});
+    };
+}));
