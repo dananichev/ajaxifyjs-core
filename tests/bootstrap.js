@@ -7,8 +7,12 @@ requirejs.config({
     //never includes a ".js" extension since
     //the paths config could be for a directory.
     paths: {
-        jquery: 'jquery-2.0.1.min'
+        jquery: 'jquery-2.0.1.min',
+        mockjax: 'jquery.mockjax'
     },
     shim: {
+        'mockjax': {
+            deps: ['jquery']
+        }
     }
 });
