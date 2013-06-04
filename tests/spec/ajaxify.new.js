@@ -3,50 +3,49 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
         "ajaxify.js",
         function(){
             it(
-                "init() should return same instance",
+                " / init() should return same instance",
                 function(){
                     var settings = {};
                     expect(ajaxify.init(settings)).toBe(ajaxify);
                 }
             );
             describe(
-                "request methods",
+                " / request methods",
                 function(){
+                    var settings = {
+                        url: '/mock/200'
+                    };
+                    $.mockjax({
+                        url: '/mock/200*',
+                        contentType: 'text/json',
+                        dataType: 'jsonp',
+                        status: 200,
+                        responseTime: 750,
+                        responseText: { "content": "123" }
+                    });
                     it(
-                        "sendRequest() should send request",
+                        " / sendRequest() should send request",
                         function(){
-                            var settings = {
-                                url: '/mock/200',
-                                format: 'json'
-                            };
-                            $.mockjax({
-                                url: '/mock/200',
-                                responseTime: 750,
-                                responseText: {
-                                    status: 'success',
-                                    content: '1231231213 123123'
-                                }
-                            });
                             expect(ajaxify.sendRequest(settings)).toBe(ajaxify);
                         }
                     );
                     it(
-                        "sendRequest() should call _setRequestOptions",
+                        " / sendRequest() should call _setRequestOptions",
                         function(){
                             spyOn(ajaxify, "_setRequestOptions");
-                            ajaxify.sendRequest({url: '/'});
+                            ajaxify.sendRequest(settings);
                             expect(ajaxify._setRequestOptions).toHaveBeenCalled()
                         }
                     );
                     it(
-                        "_setRequestOptions() should return new options",
+                        " / _setRequestOptions() should return new options",
                         function(){
                             var settings = {};
                             expect(ajaxify._setRequestOptions(settings)).toEqual(jasmine.any(Object));
                         }
                     );
                     it(
-                        "_setRequestOptions() should call _prepareRequest",
+                        " / _setRequestOptions() should call _prepareRequest",
                         function(){
                             spyOn(ajaxify, "_prepareRequest");
                             ajaxify._setRequestOptions({url: '/'});
@@ -54,14 +53,14 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                         }
                     );
                     it(
-                        "_prepareRequest() should return same instance",
+                        " / _prepareRequest() should return same instance",
                         function(){
                             var settings = {};
                             expect(ajaxify._prepareRequest()).toBe(ajaxify);
                         }
                     );
                     it(
-                        "setRequestsEnabled() should return new value",
+                        " / setRequestsEnabled() should return new value",
                         function(){
                             var flag = true;
                             expect(ajaxify.setRequestsEnabled(flag)).toEqual(flag);
@@ -70,17 +69,17 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                 }
             );
             describe(
-                "url methods",
+                " / url methods",
                 function(){
                     it(
-                        "setUrl() should return new url",
+                        " / setUrl() should return new url",
                         function(){
                             var url = '/test';
                             expect(ajaxify.setUrl(url)).toEqual(jasmine.any(String));
                         }
                     );
                     it(
-                        "getUrl() should return url",
+                        " / getUrl() should return url",
                         function(){
                             expect(ajaxify.getUrl()).toEqual(jasmine.any(String));
                         }
@@ -88,24 +87,24 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                 }
             );
             describe(
-                "response methods",
+                " / response methods",
                 function(){
                     it(
-                        "_handleResponse() should return same instance",
+                        " / _handleResponse() should return same instance",
                         function(){
                             var settings = {};
                             expect(ajaxify._handleResponse()).toBe(ajaxify);
                         }
                     );
                     it(
-                        "_doneCallback() should return same instance",
+                        " / _doneCallback() should return same instance",
                         function(){
                             var settings = {};
                             expect(ajaxify._doneCallback()).toBe(ajaxify);
                         }
                     );
                     it(
-                        "_errorCallback() should return same instance",
+                        " / _errorCallback() should return same instance",
                         function(){
                             var settings = {};
                             expect(ajaxify._errorCallback()).toBe(ajaxify);
