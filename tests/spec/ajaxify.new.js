@@ -61,33 +61,56 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                         }
                     );
                     it(
-                        "setRequestsEnabled() should return same instance",
+                        "setRequestsEnabled() should return new value",
                         function(){
                             var flag = true;
-                            expect(ajaxify.setRequestsEnabled(flag)).toBe(ajaxify);
+                            expect(ajaxify.setRequestsEnabled(flag)).toEqual(flag);
                         }
                     );
                 }
             );
-            it(
-                "_handleResponse() should return same instance",
+            describe(
+                "url methods",
                 function(){
-                    var settings = {};
-                    expect(ajaxify._handleResponse()).toBe(ajaxify);
+                    it(
+                        "setUrl() should return new url",
+                        function(){
+                            var url = '/test';
+                            expect(ajaxify.setUrl(url)).toEqual(jasmine.any(String));
+                        }
+                    );
+                    it(
+                        "getUrl() should return url",
+                        function(){
+                            expect(ajaxify.getUrl()).toEqual(jasmine.any(String));
+                        }
+                    );
                 }
             );
-            it(
-                "_doneCallback() should return same instance",
+            describe(
+                "response methods",
                 function(){
-                    var settings = {};
-                    expect(ajaxify._doneCallback()).toBe(ajaxify);
-                }
-            );
-            it(
-                "_errorCallback() should return same instance",
-                function(){
-                    var settings = {};
-                    expect(ajaxify._errorCallback()).toBe(ajaxify);
+                    it(
+                        "_handleResponse() should return same instance",
+                        function(){
+                            var settings = {};
+                            expect(ajaxify._handleResponse()).toBe(ajaxify);
+                        }
+                    );
+                    it(
+                        "_doneCallback() should return same instance",
+                        function(){
+                            var settings = {};
+                            expect(ajaxify._doneCallback()).toBe(ajaxify);
+                        }
+                    );
+                    it(
+                        "_errorCallback() should return same instance",
+                        function(){
+                            var settings = {};
+                            expect(ajaxify._errorCallback()).toBe(ajaxify);
+                        }
+                    );
                 }
             );
         }
