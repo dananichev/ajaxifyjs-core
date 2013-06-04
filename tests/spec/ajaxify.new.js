@@ -9,36 +9,64 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                     expect(ajaxify.init(settings)).toBe(ajaxify);
                 }
             );
-            it(
-                "sendRequest() should send request",
+            describe(
+                "request methods",
                 function(){
-                    var settings = {
-                        url: '/mock/200',
-                        format: 'json'
-                    };
-                    $.mockjax({
-                        url: '/mock/200',
-                        responseTime: 750,
-                        responseText: {
-                            status: 'success',
-                            content: '1231231213 123123'
+                    it(
+                        "sendRequest() should send request",
+                        function(){
+                            var settings = {
+                                url: '/mock/200',
+                                format: 'json'
+                            };
+                            $.mockjax({
+                                url: '/mock/200',
+                                responseTime: 750,
+                                responseText: {
+                                    status: 'success',
+                                    content: '1231231213 123123'
+                                }
+                            });
+                            expect(ajaxify.sendRequest(settings)).toBe(ajaxify);
                         }
-                    });
-                    expect(ajaxify.sendRequest(settings)).toBe(ajaxify);
-                }
-            );
-            it(
-                "_setRequestOptions() should return new options",
-                function(){
-                    var settings = {};
-                    expect(ajaxify._setRequestOptions(settings)).toEqual("");
-                }
-            );
-            it(
-                "_prepareRequest() should return same instance",
-                function(){
-                    var settings = {};
-                    expect(ajaxify._prepareRequest()).toBe(ajaxify);
+                    );
+                    it(
+                        "sendRequest() should call _setRequestOptions",
+                        function(){
+                            spyOn(ajaxify, "_setRequestOptions");
+                            ajaxify.sendRequest({url: '/'});
+                            expect(ajaxify._setRequestOptions).toHaveBeenCalled()
+                        }
+                    );
+                    it(
+                        "_setRequestOptions() should return new options",
+                        function(){
+                            var settings = {};
+                            expect(ajaxify._setRequestOptions(settings)).toEqual(jasmine.any(Object));
+                        }
+                    );
+                    it(
+                        "_setRequestOptions() should call _prepareRequest",
+                        function(){
+                            spyOn(ajaxify, "_prepareRequest");
+                            ajaxify._setRequestOptions({url: '/'});
+                            expect(ajaxify._prepareRequest).toHaveBeenCalled()
+                        }
+                    );
+                    it(
+                        "_prepareRequest() should return same instance",
+                        function(){
+                            var settings = {};
+                            expect(ajaxify._prepareRequest()).toBe(ajaxify);
+                        }
+                    );
+                    it(
+                        "setRequestsEnabled() should return same instance",
+                        function(){
+                            var flag = true;
+                            expect(ajaxify.setRequestsEnabled(flag)).toBe(ajaxify);
+                        }
+                    );
                 }
             );
             it(
