@@ -1,4 +1,4 @@
-define(["ajaxify.new", "mockjax"], function(ajaxify) {
+define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
     describe(
         "ajaxify.js",
         function(){
@@ -12,29 +12,66 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
             describe(
                 " / request methods",
                 function(){
-                    var settings = {
+                    var settingsSuccess = {
                         url: '/mock/200'
+                    };
+                    var settingsError = {
+                        url: '/mock/500'
                     };
                     $.mockjax({
                         url: '/mock/200*',
                         contentType: 'text/json',
                         dataType: 'jsonp',
                         status: 200,
-                        responseTime: 750,
-                        responseText: { "content": "123" }
+                        responseTime: 150,
+                        responseText: { "content": "200" }
+                    });
+                    $.mockjax({
+                        url: '/mock/500*',
+                        contentType: 'text/json',
+                        dataType: 'jsonp',
+                        status: 500,
+                        responseTime: 150,
+                        responseText: { "content": "500" }
                     });
                     it(
                         " / sendRequest() should send request",
                         function(){
-                            expect(ajaxify.sendRequest(settings)).toBe(ajaxify);
+                            expect(ajaxify.sendRequest(settingsSuccess)).toBe(ajaxify);
                         }
                     );
                     it(
                         " / sendRequest() should call _setRequestOptions",
                         function(){
                             spyOn(ajaxify, "_setRequestOptions");
-                            ajaxify.sendRequest(settings);
-                            expect(ajaxify._setRequestOptions).toHaveBeenCalled()
+                            ajaxify.sendRequest(settingsSuccess);
+                            expect(ajaxify._setRequestOptions).toHaveBeenCalled();
+                        }
+                    );
+                    it(
+                        " / sendRequest() should call _doneCallback",
+                        function(){
+                            var deferred = new $.Deferred();
+                            spyOn($, 'ajax').andReturn(deferred);
+
+                            spyOn(ajaxify, '_doneCallback');
+                            ajaxify.sendRequest(settingsSuccess);
+                            deferred.resolve('done');
+
+                            expect(ajaxify._doneCallback).toHaveBeenCalled();
+                        }
+                    );
+                    it(
+                        " / sendRequest() should call _failCallback",
+                        function(){
+                            var deferred = new $.Deferred();
+                            spyOn($, 'ajax').andReturn(deferred);
+
+                            spyOn(ajaxify, "_failCallback");
+                            ajaxify.sendRequest(settingsError);
+                            deferred.reject('fail');
+
+                            expect(ajaxify._failCallback).toHaveBeenCalled();
                         }
                     );
                     it(
@@ -49,7 +86,7 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                         function(){
                             spyOn(ajaxify, "_prepareRequest");
                             ajaxify._setRequestOptions({url: '/'});
-                            expect(ajaxify._prepareRequest).toHaveBeenCalled()
+                            expect(ajaxify._prepareRequest).toHaveBeenCalled();
                         }
                     );
                     it(
@@ -64,6 +101,18 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                         function(){
                             var flag = true;
                             expect(ajaxify.setRequestsEnabled(flag)).toEqual(flag);
+                        }
+                    );
+                    it(
+                        " / validateStateChange() should return ajaxify._requestsEnabled",
+                        function(){
+                            expect(ajaxify.validateStateChange()).toEqual(ajaxify._requestsEnabled);
+                        }
+                    );
+                    it(
+                        " / isRequestsInProgress() should return value",
+                        function(){
+                            expect(ajaxify.isRequestsInProgress()).not.toBeNull();
                         }
                     );
                 }
@@ -82,6 +131,13 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                         " / getUrl() should return url",
                         function(){
                             expect(ajaxify.getUrl()).toEqual(jasmine.any(String));
+                        }
+                    );
+                    it(
+                        " / getRelativeUrl() should return url",
+                        function(){
+                            var url = "google.com/123";
+                            expect(ajaxify.getRelativeUrl(url)).toEqual(jasmine.any(String));
                         }
                     );
                 }
@@ -104,10 +160,10 @@ define(["ajaxify.new", "mockjax"], function(ajaxify) {
                         }
                     );
                     it(
-                        " / _errorCallback() should return same instance",
+                        " / _failCallback() should return same instance",
                         function(){
                             var settings = {};
-                            expect(ajaxify._errorCallback()).toBe(ajaxify);
+                            expect(ajaxify._failCallback()).toBe(ajaxify);
                         }
                     );
                 }
