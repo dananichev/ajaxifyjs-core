@@ -1,6 +1,6 @@
 define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
     describe(
-        "ajaxify.js",
+        "ajaxify-1.0.js",
         function(){
             it(
                 " / init() should return same instance",
