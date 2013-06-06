@@ -2,14 +2,14 @@
     'use strict';
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
-        define(["ajaxify-1.0", "mockjax", "jquery"], factory);
+        define(["ajaxify", "mockjax", "jquery"], factory);
     } else {
         // Browser globals:
         factory(window.Ajaxify);
     }
 }(function (ajaxify) {
     describe(
-        "ajaxify-1.0.js",
+        "ajaxify.js",
         function(){
             it(
                 " / init() should return same instance",
