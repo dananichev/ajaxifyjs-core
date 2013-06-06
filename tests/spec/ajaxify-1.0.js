@@ -1,4 +1,13 @@
-define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define(["ajaxify-1.0", "mockjax", "jquery"], factory);
+    } else {
+        // Browser globals:
+        factory(window.Ajaxify);
+    }
+}(function (ajaxify) {
     describe(
         "ajaxify-1.0.js",
         function(){
@@ -121,23 +130,23 @@ define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
                 " / url methods",
                 function(){
                     it(
-                        " / setUrl() should return new url",
+                        " / url(string) should return new url",
                         function(){
                             var url = '/test';
-                            expect(ajaxify.setUrl(url)).toEqual(jasmine.any(String));
+                            expect(ajaxify.url(url)).toEqual(jasmine.any(String));
                         }
                     );
                     it(
-                        " / getUrl() should return url",
+                        " / url() should return url",
                         function(){
-                            expect(ajaxify.getUrl()).toEqual(jasmine.any(String));
+                            expect(ajaxify.url()).toEqual(jasmine.any(String));
                         }
                     );
                     it(
-                        " / getRelativeUrl() should return url",
+                        " / relativeUrl() should return url",
                         function(){
                             var url = "google.com/123";
-                            expect(ajaxify.getRelativeUrl(url)).toEqual(jasmine.any(String));
+                            expect(ajaxify.relativeUrl(url)).toEqual(jasmine.any(String));
                         }
                     );
                 }
@@ -170,4 +179,8 @@ define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
             );
         }
     );
-});
+}));
+
+/*define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
+
+});*/

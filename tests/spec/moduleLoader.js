@@ -1,4 +1,13 @@
-define(["moduleLoader", "jquery"], function(loader) {
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define(["moduleLoader", "jquery"], factory);
+    } else {
+        // Browser globals:
+        factory(window.Loader);
+    }
+}(function (loader) {
     describe(
         "moduleLoader.js",
         function(){
@@ -74,4 +83,4 @@ define(["moduleLoader", "jquery"], function(loader) {
             );
         }
     );
-});
+}));
