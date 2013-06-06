@@ -57,7 +57,7 @@
                     it(
                         " / initAppModules() should call parseBinding()",
                         function(){
-                            var element = $("<div data-app-module='ajaxify-1.0' />");
+                            var element = $("<div data-app-module='ajaxify' />");
                             spyOn(loader, "parseBinding");
                             loader.initAppModules(element);
                             expect(loader.parseBinding).toHaveBeenCalled();
@@ -66,7 +66,7 @@
                     it(
                         " / initAppModules() should call loadModule()",
                         function(){
-                            var element = $("<div data-app-module='ajaxify-1.0' />");
+                            var element = $("<div data-app-module='ajaxify' />");
                             spyOn(loader, "loadModule");
                             loader.initAppModules(element);
                             expect(loader.loadModule).toHaveBeenCalled();

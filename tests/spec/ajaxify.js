@@ -180,7 +180,3 @@
         }
     );
 }));
-
-/*define(["ajaxify-1.0", "mockjax", "jquery"], function(ajaxify) {
-
-});*/
