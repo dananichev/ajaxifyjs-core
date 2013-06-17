@@ -1,0 +1,15 @@
+{
+    "name": "AjaxifyJS",
+    "version": "1.0",
+    "ignore": [
+        "src/vendor",
+        "tests",
+        "**/*.txt",
+        ".gitignore",
+        ".idea",
+        "bootstrap.*"
+    ],
+    "dependencies": {
+        "jquery": "2.*"
+    }
+}

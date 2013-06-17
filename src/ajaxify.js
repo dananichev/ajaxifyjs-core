@@ -19,9 +19,10 @@
          * @property {object} settings - default settings of ajaxify
          * @property {boolean} settings.multipleQueries - if we're need to handle multiple active requests, turn this thing on
          * @property {boolean} settings.debug - Just a flag
+         * @property {string} settings.responseParamName - describes param name for JSON-variable that contains html-blocks
          * @property {object} requestOptions - default request options
          * @property {string} requestOptions.method - POST/GET/etc
-         * @property {integer} requestOptions.timestamp - request timestamp
+         * @property {number} requestOptions.timestamp - request timestamp
          * @property {string} requestOptions.dataType - format of backend data
          * @property {string} requestOptions.blocks - blocks, that we needed to take from the server
          * @property {string} requestOptions.url - request url
@@ -34,6 +35,7 @@
 
         settings: {
             multipleQueries: false,
+            responseParamName: "blocks",
             debug: false
         },
 
@@ -60,8 +62,6 @@
         _requestsEnabled: true,
         /** @private */
         _requestTimeout: 60000,
-        /** @private */
-        _ajaxLoading: ".ajaxLoading", // element or selector for "loading" container
 
         /**
          * init ajaxifyjs
@@ -261,7 +261,7 @@
          * @returns {Ajaxify} this
          */
         _handleResponse: function(response) {
-            if (typeof response !== 'undefined' && typeof response.content !== 'undefined') {
+            if (typeof response !== 'undefined' && typeof response[this.settings.responseParamName] !== 'undefined') {
                 if (typeof response.redirect !== "undefined") {
                     if (this.settings.debug === true) {
                         console.log("Redirected to: " + response.redirect);
@@ -281,13 +281,13 @@
                     response = this._requestsPool[response.timestamp].requestOptions.preParseCallback.call(this, response);
                 }
 
-                for (var key in response.content) {
+                for (var key in response[this.settings.responseParamName]) {
                     var dynamicBlock = $("[data-ajaxBlock=" + key + "]");
                     dynamicBlock.find("*").remove();
                     if (typeof(dynamicBlock.attr("data-replaceSelf")) !== "undefined") {
-                        dynamicBlock.replaceWith(response.content[key]);
+                        dynamicBlock.replaceWith(response[this.settings.responseParamName][key]);
                     } else {
-                        dynamicBlock.html(response.content[key]);
+                        dynamicBlock.html(response[this.settings.responseParamName][key]);
                     }
                     if (this.settings.debug === true) {
                         console.log("Keys is:");
@@ -295,7 +295,7 @@
                         console.log("Container contains:");
                         console.log(dynamicBlock.html());
                     }
-                    $(document).trigger("block-loaded.ajaxifyjs", [$("[data-ajaxBlock="+key+"]")]);
+                    $(document).trigger("block-loaded.ajaxifyjs", [dynamicBlock]);
                 }
 
                 if (this._requestsPool[response.timestamp].requestOptions.postParseCallback != null
@@ -333,9 +333,8 @@
 
             if (this.settings.debug === true) {
                 console.log("Ajaxify request done");
-                console.log(this._requestsPool[response.timestamp].req);
+                console.log(response);
             }
-
 
             return this;
         },
